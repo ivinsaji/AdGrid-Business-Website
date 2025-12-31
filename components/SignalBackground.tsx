@@ -4,7 +4,11 @@ import React, { useRef, useEffect, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const SignalBackground = () => {
+interface SignalBackgroundProps {
+    intensity?: number; // 0.0 to 1.0 (default 1.0)
+}
+
+const SignalBackground = ({ intensity = 1 }: SignalBackgroundProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +61,10 @@ const SignalBackground = () => {
         let animationFrameId: number;
 
         // Configuration
-        const PARTICLE_COUNT = 400; // 300-600 range
+        // Base count is 400. We scale this by intensity.
+        const baseCount = 400;
+        const PARTICLE_COUNT = Math.floor(baseCount * intensity);
+
         const PARTICLES: Particle[] = [];
 
         // Resize handler
@@ -83,10 +90,10 @@ const SignalBackground = () => {
                 // Very slow drift: 0.02 - 0.05 units/sec
                 // At 60fps, that's incredibly slow per frame: 0.0003 - 0.0008
                 // Let's assume units/sec means pixels/sec? "Speed: 0.02–0.05 units/sec"
-                // That is effectively stationary. Maybe user meant 0.2? 
+                // That is effectively stationary. Maybe user meant 0.2?
                 // "Motion should take 20–40 seconds to complete a loop" -> If screen is 1000px, 1000/40 = 25px/sec.
                 // So 0.02 is likely relative coord? Or just very slow px.
-                // Let's aim for ~10-20px per second for a "drift". 
+                // Let's aim for ~10-20px per second for a "drift".
                 // 0.2 - 0.5 px/frame.
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
@@ -145,13 +152,13 @@ const SignalBackground = () => {
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [intensity]); // Re-run if intensity changes
 
     return (
         <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none">
             {/* BASE LAYER: Dark radial falloff */}
             <div className="absolute inset-0 bg-[#0c0c0c]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-[#0c0c0c] to-[#0c0c0c] opacity-60"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/30 via-[#0c0c0c] to-[#0c0c0c] opacity-70"></div>
             </div>
 
             {/* LAYER 1: CANVAS PARTICLES */}
@@ -165,3 +172,4 @@ const SignalBackground = () => {
 };
 
 export default SignalBackground;
+

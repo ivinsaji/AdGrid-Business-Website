@@ -4,10 +4,10 @@ import { useLayoutEffect, useRef } from "react";
 import Link from 'next/link';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { NavigationMenu } from "@/components/NavigationMenu";
 import GlowBorder from "@/components/GlowBorder";
 import SystemCore from "@/components/SystemCore";
 import SignalBackground from "@/components/SignalBackground";
+import PricingAssistant from "@/components/PricingAssistant/PricingAssistant";
 import { useState } from "react";
 
 // Act 2 Data
@@ -247,7 +247,7 @@ export default function PricingPage() {
             <SignalBackground />
 
             <div className="relative z-10">
-                <NavigationMenu />
+
 
                 {/* PRICING GRID BACKGROUND LAYER (New) */}
                 <div className="fixed inset-0 z-0 pointer-events-none opacity-20"
@@ -439,6 +439,9 @@ export default function PricingPage() {
                         </p>
                     </div>
                 </footer>
+
+
+                <PricingAssistant />
             </div >
         </main >
     );

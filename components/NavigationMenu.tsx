@@ -30,6 +30,7 @@ const NAV_structure: NavItem[] = [
 export const NavigationMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [expandedItem, setExpandedItem] = useState<string | null>(null);
+    const [isChatbotOpen, setIsChatbotOpen] = useState(false); // Synchronization state
 
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -43,21 +44,39 @@ export const NavigationMenu = () => {
     useEffect(() => {
         const ctx = gsap.context(() => {
             tl.current = gsap.timeline({ paused: true })
-                .to(overlayRef.current, { opacity: 1, duration: 0.5, ease: "power2.inOut" })
-                .to(menuRef.current, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, "-=0.3")
+                .to(overlayRef.current, { autoAlpha: 1, duration: 0.5, ease: "power2.inOut" })
+                .to(menuRef.current, { x: 0, autoAlpha: 1, duration: 0.6, ease: "power3.out" }, "-=0.3")
                 .fromTo(linksRef.current.filter(Boolean),
-                    { x: 50, opacity: 0 },
-                    { x: 0, opacity: 1, stagger: 0.05, duration: 0.5, ease: "power2.out" },
+                    { x: 50, autoAlpha: 0 },
+                    { x: 0, autoAlpha: 1, stagger: 0.05, duration: 0.5, ease: "power2.out" },
                     "-=0.4"
                 );
         }, containerRef);
         return () => ctx.revert();
     }, []);
 
+    // State Synchronization with Chatbot
+    // Hide menu trigger when chatbot is open to avoid clutter/conflict
+    useEffect(() => {
+        const handleChatbotOpen = () => setIsChatbotOpen(true);
+        const handleChatbotClose = () => setIsChatbotOpen(false);
+
+        window.addEventListener('chatbot:open', handleChatbotOpen);
+        window.addEventListener('chatbot:close', handleChatbotClose);
+
+        return () => {
+            window.removeEventListener('chatbot:open', handleChatbotOpen);
+            window.removeEventListener('chatbot:close', handleChatbotClose);
+        };
+    }, []);
+
+    // Broadcast Nav State
     useEffect(() => {
         if (isOpen) {
+            window.dispatchEvent(new Event('nav:open'));
             tl.current?.timeScale(1).play();
         } else {
+            window.dispatchEvent(new Event('nav:close'));
             tl.current?.timeScale(1.5).reverse();
             setExpandedItem(null); // Reset expanded items on close
         }
@@ -83,7 +102,7 @@ export const NavigationMenu = () => {
         <div ref={containerRef} className="font-mono tracking-tight text-sm uppercase">
             {/* Trigger Button */}
             <div
-                className="fixed top-8 right-8 md:top-12 md:right-12 z-[60] p-4 cursor-pointer group"
+                className={`fixed top-8 right-8 md:top-12 md:right-12 z-[60] p-4 cursor-pointer group transition-all duration-500 ease-out ${isChatbotOpen ? 'opacity-0 pointer-events-none translate-x-4' : 'opacity-100 translate-x-0'}`}
                 onMouseEnter={handleOpen}
                 onMouseLeave={handleClose}
                 onClick={() => setIsOpen(!isOpen)}
@@ -98,7 +117,7 @@ export const NavigationMenu = () => {
             {/* Overlay */}
             <div
                 ref={overlayRef}
-                className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none data-[open=true]:pointer-events-auto"
+                className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm opacity-0 invisible pointer-events-none data-[open=true]:pointer-events-auto"
                 data-open={isOpen}
                 onClick={() => setIsOpen(false)}
             />
@@ -106,7 +125,7 @@ export const NavigationMenu = () => {
             {/* Menu Sidebar */}
             <div
                 ref={menuRef}
-                className="fixed inset-y-0 right-0 z-50 w-full md:w-[480px] bg-[#0c0c0c] border-l border-white/10 flex flex-col justify-center px-12 md:px-20 translate-x-full opacity-0 pointer-events-none data-[open=true]:pointer-events-auto"
+                className="fixed inset-y-0 right-0 z-50 w-full md:w-[480px] bg-[#0c0c0c] border-l border-white/10 flex flex-col justify-center px-12 md:px-20 translate-x-full opacity-0 invisible pointer-events-none data-[open=true]:pointer-events-auto"
                 data-open={isOpen}
                 onMouseEnter={handleOpen}
                 onMouseLeave={handleClose}

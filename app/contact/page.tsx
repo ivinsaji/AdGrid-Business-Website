@@ -4,7 +4,6 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import SignalBackground from '@/components/SignalBackground';
-import { NavigationMenu } from '@/components/NavigationMenu';
 
 // --- Floating Input Component ---
 interface FloatingInputProps {
@@ -188,7 +187,6 @@ export default function ContactPage() {
             <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)] z-0"></div>
 
             <div className="relative z-10 min-h-screen flex flex-col">
-                <NavigationMenu />
 
                 <div className="flex-grow flex items-center justify-center p-6 md:p-12 pt-32">
                     <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">

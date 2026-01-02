@@ -4,7 +4,6 @@ import React, { useLayoutEffect, useRef, useState, useMemo, useEffect } from 're
 import Link from 'next/link';
 import gsap from 'gsap';
 import SignalBackground from '@/components/SignalBackground';
-import { NavigationMenu } from '@/components/NavigationMenu';
 
 import { ALL_ARTICLES, CATEGORIES } from '@/app/blog/data';
 
@@ -98,7 +97,6 @@ export default function BlogPage() {
             <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] z-0"></div>
 
             <div className="relative z-10 flex flex-col min-h-screen">
-                <NavigationMenu />
 
                 <div className="flex-grow w-full max-w-7xl mx-auto px-6 md:px-12 pt-40 pb-20">
 

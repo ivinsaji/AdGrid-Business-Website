@@ -4,7 +4,6 @@ import React, { useLayoutEffect, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { NavigationMenu } from '@/components/NavigationMenu';
 import PortfolioTunnel from '@/components/PortfolioTunnel';
 import { PORTFOLIO_PROJECTS } from './data';
 
@@ -109,7 +108,6 @@ export default function PortfolioPage() {
     return (
         <main className="bg-black text-white selection:bg-violet-500/30 font-mono">
             <PortfolioTunnel scrollProgress={scrollProgress} />
-            <NavigationMenu />
 
             {/* CSS STICKY CONTAINER - 2000vh of scroll travel */}
             <div ref={containerRef} className="h-[2000vh] relative z-10">

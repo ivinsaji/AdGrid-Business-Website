@@ -6,8 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SignalCore, { SignalControl } from "@/components/SignalCore";
 import { OrbitControl } from "@/components/LogoOrbitRing";
 
-import { NavigationMenu } from "@/components/NavigationMenu";
-
 export default function Home() {
   const container = useRef(null);
   const textState0 = useRef(null);
@@ -276,8 +274,7 @@ export default function Home() {
         <img src="/logo.svg" alt="AdGrid Logo" className="w-10 h-10 md:w-12 md:h-12 opacity-90" />
       </div>
 
-      {/* Hamburger Menu */}
-      <NavigationMenu />
+      {/* Hamburger Menu - Moved to Layout */}
 
       {/* --- SCROLL SECTIONS --- */}
       <div className="relative z-10 w-full pointer-events-none">

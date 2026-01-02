@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ALL_ARTICLES } from '../data';
 import SignalBackground from '@/components/SignalBackground';
-import { NavigationMenu } from '@/components/NavigationMenu';
 
 export async function generateStaticParams() {
     return ALL_ARTICLES.map((article) => ({
@@ -34,7 +33,6 @@ export default async function ArticlePage({ params }: Props) {
             <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)] z-0"></div>
 
             <div className="relative z-10 flex flex-col min-h-screen">
-                <NavigationMenu />
 
                 <div className="flex-grow w-full max-w-3xl mx-auto px-6 md:px-12 pt-40 pb-20">
 
